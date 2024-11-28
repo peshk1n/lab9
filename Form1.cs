@@ -93,6 +93,7 @@ namespace lab6
             public double X { get; set; }
             public double Y { get; set; }
             public double Z { get; set; }
+            public Point3D Normal { get; set; }
 
             public Point3D(double x, double y, double z)
             {
@@ -161,13 +162,33 @@ namespace lab6
             {
                 Vertices = new List<Point3D>();
                 Faces = new List<Face>();
+                CalculatePointNormals();
             }
 
             public Polyhedron(List<Point3D> vertices, List<Face> faces)
             {
                 Vertices = vertices;
                 Faces = faces;
-                //CalculateNormals();
+                CalculatePointNormals();
+            }
+
+            // вычисление нормалей каждой вершины
+            public void CalculatePointNormals()
+            {
+                CalculateNormals();
+                for (int i=0; i<Vertices.Count; i++)
+                {
+                    //грани куда входит верщина с индексом i
+                    var faces = Faces.Where(face => face.Vertices.Contains(i)).ToList();
+                    Point3D normal = new Point3D(0, 0, 0);
+                    foreach(Face face in faces)
+                    {
+                        normal.X += face.Normal.X;
+                        normal.Y += face.Normal.Y;
+                        normal.Z += face.Normal.Z;
+                    }
+                    Vertices[i].Normal = normal.Normalize();
+                }
             }
 
             // Метод для вычисления нормалей каждой грани
@@ -1632,9 +1653,15 @@ namespace lab6
             }
         }
 
-
-        private void label31_Click(object sender, EventArgs e)
+        public class Light
         {
+            public Point3D Position { get; set; }
+            public Color Color { get; set; }
+            public Light(Point3D position, Color color)
+            {
+                Position = position;
+                Color = color;
+            }
 
         }
     }

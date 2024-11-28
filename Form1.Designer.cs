@@ -893,7 +893,6 @@
             this.label31.Size = new System.Drawing.Size(18, 20);
             this.label31.TabIndex = 44;
             this.label31.Text = "Z";
-            this.label31.Click += new System.EventHandler(this.label31_Click);
             // 
             // x_view
             // 
